@@ -1,7 +1,10 @@
 package com.schoolmanagement.schoolmanagement.entity;
 
+import lombok.Data;
+
 import javax.persistence.*;
 
+@Data
 @Entity
 @Table(name = "roles")
 public class Role {
@@ -18,22 +21,6 @@ public class Role {
 
     public Role(Integer id, Erole name) {
         this.id = id;
-        this.name = name;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Erole getName() {
-        return name;
-    }
-
-    public void setName(Erole name) {
         this.name = name;
     }
 }
