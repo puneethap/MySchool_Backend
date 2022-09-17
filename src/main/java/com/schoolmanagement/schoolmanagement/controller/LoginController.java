@@ -1,10 +1,12 @@
 package com.schoolmanagement.schoolmanagement.controller;
 
 
+import com.schoolmanagement.schoolmanagement.entity.UserOTP;
 import com.schoolmanagement.schoolmanagement.model.JwtResponse;
 import com.schoolmanagement.schoolmanagement.model.LoginRequest;
 import com.schoolmanagement.schoolmanagement.securityConfig.jwt.JwtUtils;
 import com.schoolmanagement.schoolmanagement.securityConfig.services.UserDetailsImpl;
+import com.schoolmanagement.schoolmanagement.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -27,6 +29,8 @@ public class LoginController {
     @Autowired
     JwtUtils jwtUtils;
 
+    @Autowired
+    LoginService loginService;
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
@@ -45,5 +49,15 @@ public class LoginController {
                 userDetails.getUsername(),
                 userDetails.getEmail(),
                 roles));
+    }
+
+    @GetMapping("/forgotPassword")
+    public String forgotPassword(@RequestParam("emailId") String emailId) throws Exception {
+        return loginService.sendPasswordResetLinkViaMail(emailId);
+    }
+
+    @PostMapping("/validateOTP")
+    public String validateOTP(@RequestBody UserOTP userOTP) {
+        return "";
     }
 }
