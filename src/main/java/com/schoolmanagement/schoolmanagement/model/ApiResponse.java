@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -24,6 +25,9 @@ public class ApiResponse<T> {
     }
 
     public void addError(final ApiError error) {
+        if(errors == null){
+            errors = new ArrayList<>();
+        }
         this.errors.add(error);
     }
 }
