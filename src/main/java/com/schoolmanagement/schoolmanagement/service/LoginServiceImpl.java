@@ -7,11 +7,12 @@ import com.schoolmanagement.schoolmanagement.exception.ResourceNotFoundException
 import com.schoolmanagement.schoolmanagement.repository.OtpRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
-public class LoginServiceImpl implements LoginService{
+public class LoginServiceImpl implements LoginService {
 
     @Autowired
     UserService userService;
@@ -24,10 +25,11 @@ public class LoginServiceImpl implements LoginService{
 
     @Autowired
     OtpRepository otpRepository;
+
     @Override
     public String sendPasswordResetLinkViaMail(String emailId) throws Exception {
         Optional<User> optionalUser = Optional.ofNullable(userService.findByEmail(emailId));
-        if(!optionalUser.isPresent()) {
+        if (!optionalUser.isPresent()) {
             throw new ResourceNotFoundException("No account found with this email");
         }
 
@@ -42,11 +44,11 @@ public class LoginServiceImpl implements LoginService{
     @Override
     public String resetPassword(String token, String password) throws ResourceNotFoundException {
         Optional<UserOtp> optionalUserOtp = Optional.ofNullable(otpRepository.findByToken(token));
-        if(!optionalUserOtp.isPresent()){
+        if (!optionalUserOtp.isPresent()) {
             throw new ResourceNotFoundException("Token Not present");
         }
         UserOtp otp = optionalUserOtp.get();
-        if(StaticFieldsAndMethods.isTokenExpired(otp.getTokenCreationDate())){
+        if (StaticFieldsAndMethods.isTokenExpired(otp.getTokenCreationDate())) {
             throw new ResourceNotFoundException("Token Expired");
         }
 
@@ -55,17 +57,9 @@ public class LoginServiceImpl implements LoginService{
 
         userService.save(user);
 
-        try{
-            otpService.delete(otp);
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
+        otpService.delete(otp);
 
-        finally {
-            return "Password changed successfully";
-        }
-
+        return "Password changed successfully";
     }
 
 }
