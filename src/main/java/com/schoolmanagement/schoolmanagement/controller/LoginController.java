@@ -64,7 +64,7 @@ public class LoginController {
 
     @PostMapping("/forgotPassword")
     public ResponseEntity<ApiResponse> forgotPassword(@RequestParam("email") String email) throws Exception {
-        return ok(new ApiResponse<>(loginService.sendPasswordResetLinkViaMail(email)));
+        return ok(new ApiResponse<>(loginService.sendPasswordResetOtpViaMail(email)));
     }
 
     @PostMapping("/validateOtp")

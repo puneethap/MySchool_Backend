@@ -27,7 +27,7 @@ public class LoginServiceImpl implements LoginService {
     OtpRepository otpRepository;
 
     @Override
-    public String sendPasswordResetLinkViaMail(String emailId) throws Exception {
+    public String sendPasswordResetOtpViaMail(String emailId) throws Exception {
         Optional<User> optionalUser = Optional.ofNullable(userService.findByEmail(emailId));
         if (!optionalUser.isPresent()) {
             throw new ResourceNotFoundException("No account found with this email");
