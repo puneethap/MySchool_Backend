@@ -9,9 +9,9 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "user_otp", uniqueConstraints = {@UniqueConstraint(columnNames = "user_id"), @UniqueConstraint(columnNames = "email")})
 @Data
-public class UserOTP {
+public class UserOtp {
 
-    public UserOTP() {
+    public UserOtp() {
     }
 
     @Id
@@ -24,13 +24,13 @@ public class UserOTP {
     @Column(columnDefinition = "TIMESTAMP")
     private LocalDateTime tokenCreationDate;
 
-    private String OTP;
+    private String otp;
 
-    public UserOTP(Long userId, String email, String token, LocalDateTime tokenCreationDate, String OTP) {
+    public UserOtp(Long userId, String email, String token, LocalDateTime tokenCreationDate, String otp) {
         this.userId = userId;
         this.email = email;
         this.token = token;
         this.tokenCreationDate = tokenCreationDate;
-        this.OTP = OTP;
+        this.otp = otp;
     }
 }
