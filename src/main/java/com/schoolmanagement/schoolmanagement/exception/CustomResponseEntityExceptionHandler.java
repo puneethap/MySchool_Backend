@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @ControllerAdvice
@@ -44,7 +46,11 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
             String errorMessage = error.getDefaultMessage();
             errors.put(fieldName, errorMessage);
         });
-        ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, errors.toString());
+
+        List<Map> errorDetails = new ArrayList<>();
+        errorDetails.add(errors);
+
+        ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, "Validation Errors", errorDetails);
         ApiResponse apiResponse = new ApiResponse<>(apiError);
         return ResponseEntity.status(apiError.getStatus()).body(apiResponse);
     }
