@@ -37,7 +37,9 @@ public class LoginServiceImpl implements LoginService {
         UserOtp userOtp = new UserOtp(user.getId(), user.getEmail(), StaticFieldsAndMethods.generateToken(), LocalDateTime.now(), StaticFieldsAndMethods.generateOTP(4));
 
         emailService.sendSimpleMail(userOtp.getEmail(), "OTP for password reset", userOtp.getOtp());
+
         userOtp = otpService.saveUserOtp(userOtp);
+
         return userOtp.getToken();
     }
 

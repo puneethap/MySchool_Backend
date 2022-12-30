@@ -1,6 +1,7 @@
 package com.schoolmanagement.schoolmanagement.service;
 
 import com.schoolmanagement.schoolmanagement.constant.StaticFieldsAndMethods;
+import com.schoolmanagement.schoolmanagement.entity.User;
 import com.schoolmanagement.schoolmanagement.entity.UserOtp;
 import com.schoolmanagement.schoolmanagement.exception.ResourceNotFoundException;
 import com.schoolmanagement.schoolmanagement.repository.OtpRepository;
@@ -14,6 +15,7 @@ public class OtpServiceImpl implements OtpService {
 
     @Autowired
     OtpRepository otpRepository;
+
     @Override
     public UserOtp saveUserOtp(UserOtp userOtp) {
         return otpRepository.save(userOtp);
@@ -22,17 +24,21 @@ public class OtpServiceImpl implements OtpService {
     @Override
     public String validateOtp(String token, String otp) throws ResourceNotFoundException {
         Optional<UserOtp> optionalUserOtp = Optional.ofNullable(otpRepository.findByToken(token));
-        if(!optionalUserOtp.isPresent()){
+        if (!optionalUserOtp.isPresent()) {
             throw new ResourceNotFoundException("Token Not present");
         }
         UserOtp user = optionalUserOtp.get();
-        if(StaticFieldsAndMethods.isTokenExpired(user.getTokenCreationDate())){
+        if (StaticFieldsAndMethods.isTokenExpired(user.getTokenCreationDate())) {
             throw new ResourceNotFoundException("Token Expired");
         }
-        if(!(otp.equals(user.getOtp()))) {
+        if (!(otp.equals(user.getOtp()))) {
             throw new ResourceNotFoundException("Invalid OTP");
         }
-       return user.getToken();
+
+        user.setOtpValidated("Y");
+        saveUserOtp(user);
+
+        return user.getToken();
     }
 
     @Override

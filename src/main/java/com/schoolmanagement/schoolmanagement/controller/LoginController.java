@@ -16,8 +16,14 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,6 +32,7 @@ import static org.springframework.http.ResponseEntity.ok;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/mySchool")
+@Validated
 public class LoginController {
 
     @Autowired
@@ -42,8 +49,9 @@ public class LoginController {
 
     @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
+
     @PostMapping("/login")
-    public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 
@@ -63,17 +71,38 @@ public class LoginController {
     }
 
     @PostMapping("/forgotPassword")
-    public ResponseEntity<ApiResponse> forgotPassword(@RequestParam("email") String email) throws Exception {
+    public ResponseEntity<ApiResponse> forgotPassword(@NotNull(message = "Email is null")
+                                                      @NotBlank(message = "Email is blank")
+                                                      @Email(message = "Invalid Email")
+                                                      @RequestParam("email")
+                                                      String email) throws Exception {
         return ok(new ApiResponse<>(loginService.sendPasswordResetOtpViaMail(email)));
     }
 
     @PostMapping("/validateOtp")
-    public ResponseEntity<ApiResponse> validateOtp(@RequestParam("token") String token, @RequestParam("otp") String otp) throws ResourceNotFoundException {
+    public ResponseEntity<ApiResponse> validateOtp(@NotNull(message = "Token is null")
+                                                   @NotBlank(message = "Token is blank")
+                                                   @RequestParam("token")
+                                                   String token,
+
+                                                   @NotNull(message = "OTP is null")
+                                                   @NotBlank(message = "OTP is blank")
+                                                   @Size(min = 4, max = 4, message = "OTP should be 4 digits")
+                                                   @RequestParam("otp")
+                                                   String otp) throws ResourceNotFoundException {
         return ok(new ApiResponse<>(otpService.validateOtp(token, otp)));
     }
 
     @PostMapping("/resetPassword")
-    public ResponseEntity<ApiResponse> resetPassword(@RequestParam("token") String token, @RequestParam("password") String password) throws ResourceNotFoundException {
+    public ResponseEntity<ApiResponse> resetPassword(@NotNull(message = "Token is null")
+                                                     @NotBlank(message = "Token is blank")
+                                                     @RequestParam("token")
+                                                     String token,
+
+                                                     @NotNull(message = "Password is null")
+                                                     @NotBlank(message = "Password is blank")
+                                                     @RequestParam("password")
+                                                     String password) throws ResourceNotFoundException {
         return ok(new ApiResponse<>(loginService.resetPassword(token, bCryptPasswordEncoder.encode(password))));
     }
 }

@@ -26,6 +26,8 @@ public class UserOtp {
 
     private String otp;
 
+    private String otpValidated;
+
     public UserOtp(Long userId, String email, String token, LocalDateTime tokenCreationDate, String otp) {
         this.userId = userId;
         this.email = email;
