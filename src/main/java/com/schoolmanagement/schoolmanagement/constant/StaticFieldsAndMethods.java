@@ -6,14 +6,14 @@ import java.util.Random;
 import java.util.UUID;
 
 public class StaticFieldsAndMethods {
-    public static final String numberForOTP = "1234567890";
-    private static final long EXPIRE_TOKEN_AFTER_MINUTES = 5;
+    private static final String NUMBER_FOR_OTP = "1234567890";
+    private static final int EXPIRE_TOKEN_AFTER_MINUTES = 5;
 
     public static String generateOTP(int otpLength) {
         Random random = new Random();
         char[] otp = new char[otpLength];
         for (int i = 0; i < otpLength; i++) {
-            otp[i] = StaticFieldsAndMethods.numberForOTP.charAt(random.nextInt(StaticFieldsAndMethods.numberForOTP.length()));
+            otp[i] = NUMBER_FOR_OTP.charAt(random.nextInt(NUMBER_FOR_OTP.length()));
         }
 
         return String.valueOf(otp);

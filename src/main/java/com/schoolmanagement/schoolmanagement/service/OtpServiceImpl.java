@@ -23,9 +23,6 @@ public class OtpServiceImpl implements OtpService {
     @Autowired
     EmailService emailService;
 
-    @Autowired
-    OtpService otpService;
-
     @Override
     public UserOtp saveUserOtp(UserOtp userOtp) {
         return otpRepository.save(userOtp);
@@ -73,7 +70,7 @@ public class OtpServiceImpl implements OtpService {
 
         emailService.sendSimpleMail(userOtp.getEmail(), "OTP for password reset", userOtp.getOtp());
 
-        userOtp = otpService.saveUserOtp(userOtp);
+        userOtp = saveUserOtp(userOtp);
 
         return userOtp.getToken();
     }
