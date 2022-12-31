@@ -6,7 +6,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 @Service
-public class EmailServiceImpl implements EmailService{
+public class EmailServiceImpl implements EmailService {
 
     @Autowired
     JavaMailSender mailSender;
@@ -17,10 +17,9 @@ public class EmailServiceImpl implements EmailService{
         message.setTo(toEmail);
         message.setSubject(subject);
         message.setText(body);
-        try{
+        try {
             mailSender.send(message);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             throw new Exception("Email could not be sent");
         }
     }

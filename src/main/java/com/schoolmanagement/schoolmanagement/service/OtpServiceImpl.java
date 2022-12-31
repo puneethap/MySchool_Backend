@@ -1,7 +1,6 @@
 package com.schoolmanagement.schoolmanagement.service;
 
 import com.schoolmanagement.schoolmanagement.constant.StaticFieldsAndMethods;
-import com.schoolmanagement.schoolmanagement.entity.User;
 import com.schoolmanagement.schoolmanagement.entity.UserOtp;
 import com.schoolmanagement.schoolmanagement.exception.ResourceNotFoundException;
 import com.schoolmanagement.schoolmanagement.repository.OtpRepository;

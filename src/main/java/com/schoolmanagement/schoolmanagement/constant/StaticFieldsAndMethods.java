@@ -12,7 +12,7 @@ public class StaticFieldsAndMethods {
     public static String generateOTP(int otpLength) {
         Random random = new Random();
         char[] otp = new char[otpLength];
-        for(int i = 0; i < otpLength; i++) {
+        for (int i = 0; i < otpLength; i++) {
             otp[i] = StaticFieldsAndMethods.numberForOTP.charAt(random.nextInt(StaticFieldsAndMethods.numberForOTP.length()));
         }
 

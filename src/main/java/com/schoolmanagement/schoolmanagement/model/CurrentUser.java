@@ -4,6 +4,7 @@ import com.schoolmanagement.schoolmanagement.entity.Erole;
 import lombok.Data;
 
 import java.util.List;
+
 @Data
 public class CurrentUser {
     private String userName;
