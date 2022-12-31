@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import javax.validation.ConstraintViolationException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -60,6 +61,13 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
             MissingServletRequestParameterException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
         String errorMessage = ex.getParameterName() + " is missing";
         ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, errorMessage);
+        ApiResponse apiResponse = new ApiResponse<>(apiError);
+        return ResponseEntity.status(apiError.getStatus()).body(apiResponse);
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<ApiResponse> constraintViolationException(ConstraintViolationException exception) {
+        ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, exception.getMessage());
         ApiResponse apiResponse = new ApiResponse<>(apiError);
         return ResponseEntity.status(apiError.getStatus()).body(apiResponse);
     }

@@ -1,6 +1,7 @@
 package com.schoolmanagement.schoolmanagement.controller;
 
 
+import com.schoolmanagement.schoolmanagement.customAnnotations.interfaces.ValidatedOtp;
 import com.schoolmanagement.schoolmanagement.exception.ResourceNotFoundException;
 import com.schoolmanagement.schoolmanagement.model.ApiResponse;
 import com.schoolmanagement.schoolmanagement.model.JwtResponse;
@@ -96,6 +97,7 @@ public class LoginController {
     @PostMapping("/resetPassword")
     public ResponseEntity<ApiResponse> resetPassword(@NotNull(message = "Token is null")
                                                      @NotBlank(message = "Token is blank")
+                                                     @ValidatedOtp
                                                      @RequestParam("token")
                                                      String token,
 

@@ -9,4 +9,6 @@ public interface OtpService {
     public String validateOtp(String token, String otp) throws ResourceNotFoundException;
 
     public void delete(UserOtp otp);
+
+    public UserOtp findByToken(String token);
 }
