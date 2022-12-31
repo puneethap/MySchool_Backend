@@ -77,7 +77,7 @@ public class LoginController {
                                                       @Email(message = "Invalid Email")
                                                       @RequestParam("email")
                                                       String email) throws Exception {
-        return ok(new ApiResponse<>(loginService.sendPasswordResetOtpViaMail(email)));
+        return ok(new ApiResponse<>(otpService.sendPasswordResetOtpViaMail(email)));
     }
 
     @PostMapping("/validateOtp")

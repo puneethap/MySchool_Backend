@@ -1,12 +1,14 @@
 package com.schoolmanagement.schoolmanagement.service;
 
 import com.schoolmanagement.schoolmanagement.constant.StaticFieldsAndMethods;
+import com.schoolmanagement.schoolmanagement.entity.User;
 import com.schoolmanagement.schoolmanagement.entity.UserOtp;
 import com.schoolmanagement.schoolmanagement.exception.ResourceNotFoundException;
 import com.schoolmanagement.schoolmanagement.repository.OtpRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -14,6 +16,15 @@ public class OtpServiceImpl implements OtpService {
 
     @Autowired
     OtpRepository otpRepository;
+
+    @Autowired
+    UserService userService;
+
+    @Autowired
+    EmailService emailService;
+
+    @Autowired
+    OtpService otpService;
 
     @Override
     public UserOtp saveUserOtp(UserOtp userOtp) {
@@ -48,5 +59,22 @@ public class OtpServiceImpl implements OtpService {
     @Override
     public UserOtp findByToken(String token) {
         return otpRepository.findByToken(token);
+    }
+
+    @Override
+    public String sendPasswordResetOtpViaMail(String emailId) throws Exception {
+        Optional<User> optionalUser = Optional.ofNullable(userService.findByEmail(emailId));
+        if (!optionalUser.isPresent()) {
+            throw new ResourceNotFoundException("No account found with this email");
+        }
+
+        User user = optionalUser.get();
+        UserOtp userOtp = new UserOtp(user.getId(), user.getEmail(), StaticFieldsAndMethods.generateToken(), LocalDateTime.now(), StaticFieldsAndMethods.generateOTP(4));
+
+        emailService.sendSimpleMail(userOtp.getEmail(), "OTP for password reset", userOtp.getOtp());
+
+        userOtp = otpService.saveUserOtp(userOtp);
+
+        return userOtp.getToken();
     }
 }

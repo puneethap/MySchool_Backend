@@ -11,4 +11,6 @@ public interface OtpService {
     public void delete(UserOtp otp);
 
     public UserOtp findByToken(String token);
+
+    public String sendPasswordResetOtpViaMail(String emailId) throws Exception;
 }
