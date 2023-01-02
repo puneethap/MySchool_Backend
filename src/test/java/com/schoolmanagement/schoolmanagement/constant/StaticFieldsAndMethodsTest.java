@@ -1,6 +1,5 @@
 package com.schoolmanagement.schoolmanagement.constant;
 
-import org.aspectj.lang.annotation.Before;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
