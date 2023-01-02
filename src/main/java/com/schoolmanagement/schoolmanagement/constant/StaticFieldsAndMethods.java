@@ -7,7 +7,7 @@ import java.util.UUID;
 
 public class StaticFieldsAndMethods {
     private static final String NUMBER_FOR_OTP = "1234567890";
-    private static final int EXPIRE_TOKEN_AFTER_MINUTES = 5;
+    public static final int EXPIRE_TOKEN_AFTER_MINUTES = 5;
 
     public static String generateOTP(int otpLength) {
         Random random = new Random();

@@ -30,7 +30,7 @@ public class OtpServiceImpl implements OtpService {
 
     @Override
     public String validateOtp(String token, String otp) throws ResourceNotFoundException {
-        Optional<UserOtp> optionalUserOtp = Optional.ofNullable(findByToken(token));
+        Optional<UserOtp> optionalUserOtp = Optional.ofNullable(findUserOtpByToken(token));
         if (!optionalUserOtp.isPresent()) {
             throw new ResourceNotFoundException("Token Not present");
         }
@@ -49,12 +49,12 @@ public class OtpServiceImpl implements OtpService {
     }
 
     @Override
-    public void delete(UserOtp otp) {
+    public void deleteUserOtp(UserOtp otp) {
         otpRepository.delete(otp);
     }
 
     @Override
-    public UserOtp findByToken(String token) {
+    public UserOtp findUserOtpByToken(String token) {
         return otpRepository.findByToken(token);
     }
 

@@ -20,7 +20,7 @@ public class LoginServiceImpl implements LoginService {
 
     @Override
     public String resetPassword(String token, String password) throws ResourceNotFoundException {
-        Optional<UserOtp> optionalUserOtp = Optional.ofNullable(otpService.findByToken(token));
+        Optional<UserOtp> optionalUserOtp = Optional.ofNullable(otpService.findUserOtpByToken(token));
         if (!optionalUserOtp.isPresent()) {
             throw new ResourceNotFoundException("Token Not present");
         }
@@ -34,7 +34,7 @@ public class LoginServiceImpl implements LoginService {
 
         userService.save(user);
 
-        otpService.delete(otp);
+        otpService.deleteUserOtp(otp);
 
         return "Password changed successfully";
     }

@@ -16,7 +16,7 @@ public class ValidatedOtpValidator implements ConstraintValidator<ValidatedOtp, 
 
     @Override
     public boolean isValid(String token, ConstraintValidatorContext constraintValidatorContext) {
-        Optional<UserOtp> optionalUserOtp = Optional.ofNullable(otpService.findByToken(token));
+        Optional<UserOtp> optionalUserOtp = Optional.ofNullable(otpService.findUserOtpByToken(token));
         if (!optionalUserOtp.isPresent())
             return false;
         if (validatedOtp(optionalUserOtp)) {

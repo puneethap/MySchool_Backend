@@ -12,25 +12,26 @@ import static org.junit.jupiter.api.Assertions.*;
 class StaticFieldsAndMethodsTest {
 
     private static final int EXPIRE_TOKEN_AFTER_MINUTES = 5;
+    private static final int OTP_LENGTH = 4;
 
     @Test
     void testGenerateOTP() {
-        String otp = StaticFieldsAndMethods.generateOTP(4);
-        assertEquals(4, otp.length());
+        String otp = StaticFieldsAndMethods.generateOTP(OTP_LENGTH);
+        assertEquals(OTP_LENGTH, otp.length());
     }
 
     @Test
-    void testIsTokenExpired() {
-        LocalDateTime tokenCreationDateTime;
-        boolean isTokenExpired;
-
-        tokenCreationDateTime = LocalDateTime.now();
-        isTokenExpired = StaticFieldsAndMethods.isTokenExpired(tokenCreationDateTime);
+    void testIsTokenExpired_when_token_not_expired() {
+        LocalDateTime tokenCreationDateTime = LocalDateTime.now();
+        boolean isTokenExpired = StaticFieldsAndMethods.isTokenExpired(tokenCreationDateTime);
 
         assertFalse(isTokenExpired);
+    }
 
-        tokenCreationDateTime = LocalDateTime.now().minusMinutes(EXPIRE_TOKEN_AFTER_MINUTES);
-        isTokenExpired = StaticFieldsAndMethods.isTokenExpired(tokenCreationDateTime);
+    @Test
+    void testIsTokenExpired_when_token_is_expired() {
+        LocalDateTime tokenCreationDateTime = LocalDateTime.now().minusMinutes(EXPIRE_TOKEN_AFTER_MINUTES);
+        boolean isTokenExpired = StaticFieldsAndMethods.isTokenExpired(tokenCreationDateTime);
 
         assertTrue(isTokenExpired);
     }
