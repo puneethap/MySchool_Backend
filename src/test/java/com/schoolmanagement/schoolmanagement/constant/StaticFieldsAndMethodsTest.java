@@ -14,13 +14,13 @@ class StaticFieldsAndMethodsTest {
     private static final int OTP_LENGTH = 4;
 
     @Test
-    void testGenerateOTP() {
+    void generateOTP() {
         String otp = StaticFieldsAndMethods.generateOTP(OTP_LENGTH);
         assertEquals(OTP_LENGTH, otp.length());
     }
 
     @Test
-    void testIsTokenExpired_when_token_not_expired() {
+    void isTokenExpired_when_token_not_expired() {
         LocalDateTime tokenCreationDateTime = LocalDateTime.now();
         boolean isTokenExpired = StaticFieldsAndMethods.isTokenExpired(tokenCreationDateTime);
 
@@ -28,7 +28,7 @@ class StaticFieldsAndMethodsTest {
     }
 
     @Test
-    void testIsTokenExpired_when_token_is_expired() {
+    void isTokenExpired_when_token_is_expired() {
         LocalDateTime tokenCreationDateTime = LocalDateTime.now().minusMinutes(EXPIRE_TOKEN_AFTER_MINUTES);
         boolean isTokenExpired = StaticFieldsAndMethods.isTokenExpired(tokenCreationDateTime);
 

@@ -9,7 +9,6 @@ import com.schoolmanagement.schoolmanagement.model.LoginRequest;
 import com.schoolmanagement.schoolmanagement.securityConfig.jwt.JwtUtils;
 import com.schoolmanagement.schoolmanagement.securityConfig.services.UserDetailsImpl;
 import com.schoolmanagement.schoolmanagement.service.LoginService;
-import com.schoolmanagement.schoolmanagement.service.OtpService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -46,9 +45,6 @@ public class LoginController {
     LoginService loginService;
 
     @Autowired
-    OtpService otpService;
-
-    @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @PostMapping("/login")
@@ -77,11 +73,11 @@ public class LoginController {
                                                       @Email(message = "Invalid Email")
                                                       @RequestParam("email")
                                                       String email) throws Exception {
-        return ok(new ApiResponse<>(otpService.sendPasswordResetOtpViaMail(email)));
+        return ok(new ApiResponse<>(loginService.sendPasswordResetOtp(email)));
     }
 
-    @PostMapping("/validateOtp")
-    public ResponseEntity<ApiResponse> validateOtp(@NotNull(message = "Token is null")
+    @PostMapping("/validatePasswordResetOtp")
+    public ResponseEntity<ApiResponse> validatePasswordResetOtp(@NotNull(message = "Token is null")
                                                    @NotBlank(message = "Token is blank")
                                                    @RequestParam("token")
                                                    String token,
@@ -91,7 +87,7 @@ public class LoginController {
                                                    @Size(min = 4, max = 4, message = "OTP should be 4 digits")
                                                    @RequestParam("otp")
                                                    String otp) throws ResourceNotFoundException {
-        return ok(new ApiResponse<>(otpService.validateOtp(token, otp)));
+        return ok(new ApiResponse<>(loginService.validatePasswordResetOtp(token, otp)));
     }
 
     @PostMapping("/resetPassword")

@@ -19,6 +19,16 @@ public class LoginServiceImpl implements LoginService {
     OtpService otpService;
 
     @Override
+    public String sendPasswordResetOtp(String email) throws Exception {
+        return otpService.sendOtpViaMail(email, "Password Reset OTP");
+    }
+
+    @Override
+    public String validatePasswordResetOtp(String token, String otp) throws ResourceNotFoundException {
+        return otpService.validateOtp(token, otp);
+    }
+
+    @Override
     public String resetPassword(String token, String password) throws ResourceNotFoundException {
         Optional<UserOtp> optionalUserOtp = Optional.ofNullable(otpService.findUserOtpByToken(token));
         if (!optionalUserOtp.isPresent()) {
@@ -38,5 +48,4 @@ public class LoginServiceImpl implements LoginService {
 
         return "Password changed successfully";
     }
-
 }

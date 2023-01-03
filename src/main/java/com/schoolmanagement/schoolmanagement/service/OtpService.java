@@ -12,5 +12,5 @@ public interface OtpService {
 
     public UserOtp findUserOtpByToken(String token);
 
-    public String sendPasswordResetOtpViaMail(String emailId) throws Exception;
+    public String sendOtpViaMail(String emailId, String subject) throws Exception;
 }

@@ -48,7 +48,7 @@ class OtpServiceImplTest {
     }
 
     @Test
-    void testSaveUserOtp() {
+    void saveUserOtp() {
         when(otpRepository.save(userOtp)).thenReturn(userOtp);
 
         UserOtp savedUserOtp = otpService.saveUserOtp(userOtp);
@@ -57,7 +57,7 @@ class OtpServiceImplTest {
     }
 
     @Test
-    void testValidateOtp_when_success() throws ResourceNotFoundException {
+    void validateOtp_when_success() throws ResourceNotFoundException {
         when(otpRepository.findByToken(token)).thenReturn(userOtp);
         when(otpRepository.save(userOtp)).thenReturn(userOtp);
 
@@ -67,7 +67,7 @@ class OtpServiceImplTest {
     }
 
     @Test
-    void testValidateOtp_when_token_not_present() {
+    void validateOtp_when_token_not_present() {
         when(otpRepository.findByToken(token)).thenReturn(null);
         when(otpRepository.save(userOtp)).thenReturn(userOtp);
 
@@ -75,7 +75,7 @@ class OtpServiceImplTest {
     }
 
     @Test
-    void testValidateOtp_when_token_expired() {
+    void validateOtp_when_token_expired() {
         userOtp = new UserOtp(1L, email, token, expiredTokenCreationDateTime, otp);
 
         when(otpRepository.findByToken(token)).thenReturn(userOtp);
@@ -85,7 +85,7 @@ class OtpServiceImplTest {
     }
 
     @Test
-    void testValidateOtp_when_otp_is_invalid() {
+    void validateOtp_when_otp_is_invalid() {
         when(otpRepository.findByToken(token)).thenReturn(userOtp);
         when(otpRepository.save(userOtp)).thenReturn(userOtp);
 
@@ -95,7 +95,7 @@ class OtpServiceImplTest {
     }
 
     @Test
-    void testDeleteUserOtp() {
+    void deleteUserOtp() {
         doNothing().when(otpRepository).delete(any());
 
         otpService.deleteUserOtp(userOtp);
@@ -104,7 +104,7 @@ class OtpServiceImplTest {
     }
 
     @Test
-    void testFindUserOtpByToken_when_record_found() {
+    void findUserOtpByToken_when_record_found() {
         when(otpRepository.findByToken(token)).thenReturn(userOtp);
 
         UserOtp fetchedUserOtp = otpService.findUserOtpByToken(token);
@@ -113,7 +113,7 @@ class OtpServiceImplTest {
     }
 
     @Test
-    void testFindUserOtpByToken_when_record_not_found() {
+    void findUserOtpByToken_when_record_not_found() {
         when(otpRepository.findByToken(token)).thenReturn(null);
 
         UserOtp fetchedUserOtp = otpService.findUserOtpByToken(token);
@@ -122,6 +122,6 @@ class OtpServiceImplTest {
     }
 
     @Test
-    void testSendPasswordResetOtpViaMail() {
+    void sendOtpViaMail() {
     }
 }

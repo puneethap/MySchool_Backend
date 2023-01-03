@@ -32,7 +32,7 @@ public class OtpServiceImpl implements OtpService {
     public String validateOtp(String token, String otp) throws ResourceNotFoundException {
         Optional<UserOtp> optionalUserOtp = Optional.ofNullable(findUserOtpByToken(token));
         if (!optionalUserOtp.isPresent()) {
-            throw new ResourceNotFoundException("Token Not present");
+            throw new ResourceNotFoundException("Invalid Token");
         }
         UserOtp user = optionalUserOtp.get();
         if (StaticFieldsAndMethods.isTokenExpired(user.getTokenCreationDate())) {
@@ -59,7 +59,7 @@ public class OtpServiceImpl implements OtpService {
     }
 
     @Override
-    public String sendPasswordResetOtpViaMail(String emailId) throws Exception {
+    public String sendOtpViaMail(String emailId, String subject) throws Exception {
         Optional<User> optionalUser = Optional.ofNullable(userService.findByEmail(emailId));
         if (!optionalUser.isPresent()) {
             throw new ResourceNotFoundException("No account found with this email");
@@ -68,7 +68,7 @@ public class OtpServiceImpl implements OtpService {
         User user = optionalUser.get();
         UserOtp userOtp = new UserOtp(user.getId(), user.getEmail(), StaticFieldsAndMethods.generateToken(), LocalDateTime.now(), StaticFieldsAndMethods.generateOTP(4));
 
-        emailService.sendSimpleMail(userOtp.getEmail(), "OTP for password reset", userOtp.getOtp());
+        emailService.sendSimpleMail(userOtp.getEmail(), subject, userOtp.getOtp());
 
         userOtp = saveUserOtp(userOtp);
 
