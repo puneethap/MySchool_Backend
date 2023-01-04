@@ -1,6 +1,6 @@
-package com.schoolmanagement.schoolmanagement.securityConfig.jwt;
+package com.schoolmanagement.schoolmanagement.config.securityConfig.jwt;
 
-import com.schoolmanagement.schoolmanagement.securityConfig.services.UserDetailsServiceImpl;
+import com.schoolmanagement.schoolmanagement.config.securityConfig.services.UserDetailsServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

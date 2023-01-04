@@ -1,6 +1,6 @@
-package com.schoolmanagement.schoolmanagement.securityConfig.jwt;
+package com.schoolmanagement.schoolmanagement.config.securityConfig.jwt;
 
-import com.schoolmanagement.schoolmanagement.securityConfig.services.UserDetailsImpl;
+import com.schoolmanagement.schoolmanagement.config.securityConfig.services.UserDetailsImpl;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

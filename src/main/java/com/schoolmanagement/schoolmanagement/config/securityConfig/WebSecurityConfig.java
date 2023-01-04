@@ -1,8 +1,8 @@
-package com.schoolmanagement.schoolmanagement.securityConfig;
+package com.schoolmanagement.schoolmanagement.config.securityConfig;
 
-import com.schoolmanagement.schoolmanagement.securityConfig.jwt.JwtAuthenticationEntryPoint;
-import com.schoolmanagement.schoolmanagement.securityConfig.jwt.JwtRequestFilter;
-import com.schoolmanagement.schoolmanagement.securityConfig.services.UserDetailsServiceImpl;
+import com.schoolmanagement.schoolmanagement.config.securityConfig.jwt.JwtAuthenticationEntryPoint;
+import com.schoolmanagement.schoolmanagement.config.securityConfig.jwt.JwtRequestFilter;
+import com.schoolmanagement.schoolmanagement.config.securityConfig.services.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

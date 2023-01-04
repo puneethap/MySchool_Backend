@@ -6,8 +6,8 @@ import com.schoolmanagement.schoolmanagement.exception.ResourceNotFoundException
 import com.schoolmanagement.schoolmanagement.model.ApiResponse;
 import com.schoolmanagement.schoolmanagement.model.JwtResponse;
 import com.schoolmanagement.schoolmanagement.model.LoginRequest;
-import com.schoolmanagement.schoolmanagement.securityConfig.jwt.JwtUtils;
-import com.schoolmanagement.schoolmanagement.securityConfig.services.UserDetailsImpl;
+import com.schoolmanagement.schoolmanagement.config.securityConfig.jwt.JwtUtils;
+import com.schoolmanagement.schoolmanagement.config.securityConfig.services.UserDetailsImpl;
 import com.schoolmanagement.schoolmanagement.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -78,15 +78,15 @@ public class LoginController {
 
     @PostMapping("/validatePasswordResetOtp")
     public ResponseEntity<ApiResponse> validatePasswordResetOtp(@NotNull(message = "Token is null")
-                                                   @NotBlank(message = "Token is blank")
-                                                   @RequestParam("token")
-                                                   String token,
+                                                                @NotBlank(message = "Token is blank")
+                                                                @RequestParam("token")
+                                                                String token,
 
-                                                   @NotNull(message = "OTP is null")
-                                                   @NotBlank(message = "OTP is blank")
-                                                   @Size(min = 4, max = 4, message = "OTP should be 4 digits")
-                                                   @RequestParam("otp")
-                                                   String otp) throws ResourceNotFoundException {
+                                                                @NotNull(message = "OTP is null")
+                                                                @NotBlank(message = "OTP is blank")
+                                                                @Size(min = 4, max = 4, message = "OTP should be of 4 digits")
+                                                                @RequestParam("otp")
+                                                                String otp) throws ResourceNotFoundException {
         return ok(new ApiResponse<>(loginService.validatePasswordResetOtp(token, otp)));
     }
 
