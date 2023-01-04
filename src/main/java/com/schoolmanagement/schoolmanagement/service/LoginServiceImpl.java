@@ -32,14 +32,19 @@ public class LoginServiceImpl implements LoginService {
     public String resetPassword(String token, String password) throws ResourceNotFoundException {
         Optional<UserOtp> optionalUserOtp = Optional.ofNullable(otpService.findUserOtpByToken(token));
         if (!optionalUserOtp.isPresent()) {
-            throw new ResourceNotFoundException("Token Not present");
+            throw new ResourceNotFoundException("Invalid Token");
         }
         UserOtp otp = optionalUserOtp.get();
         if (StaticFieldsAndMethods.isTokenExpired(otp.getTokenCreationDate())) {
             throw new ResourceNotFoundException("Token Expired");
         }
 
-        User user = userService.findById(otp.getUserId());
+        Optional<User> optionalUser = Optional.ofNullable(userService.findById(otp.getUserId()));
+        if (!optionalUser.isPresent()) {
+            throw new ResourceNotFoundException("User is not found with id " + otp.getUserId());
+        }
+
+        User user = optionalUser.get();
         user.setPassword(password);
 
         userService.save(user);
