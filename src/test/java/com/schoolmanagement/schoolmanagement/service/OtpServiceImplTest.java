@@ -50,7 +50,7 @@ class OtpServiceImplTest {
 
     @BeforeEach
     void setup() {
-        token = UUID.randomUUID().toString();
+        token = StaticFieldsAndMethods.generateToken();
         otp = "1234";
         email = "abc@xyz.com";
         validTokenCreationDateTime = LocalDateTime.now();
@@ -87,7 +87,7 @@ class OtpServiceImplTest {
 
     @Test
     void validateOtp_when_token_expired() {
-        userOtp = new UserOtp(1L, email, token, expiredTokenCreationDateTime, otp);
+        userOtp.setTokenCreationDate(expiredTokenCreationDateTime);
 
         when(otpRepository.findByToken(token)).thenReturn(userOtp);
 
