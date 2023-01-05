@@ -1,5 +1,6 @@
 package com.schoolmanagement.schoolmanagement.service;
 
+import com.schoolmanagement.schoolmanagement.constant.Messages;
 import com.schoolmanagement.schoolmanagement.constant.StaticFieldsAndMethods;
 import com.schoolmanagement.schoolmanagement.entity.User;
 import com.schoolmanagement.schoolmanagement.entity.UserOtp;
@@ -32,16 +33,16 @@ public class LoginServiceImpl implements LoginService {
     public String resetPassword(String token, String password) throws ResourceNotFoundException {
         Optional<UserOtp> optionalUserOtp = Optional.ofNullable(otpService.findUserOtpByToken(token));
         if (!optionalUserOtp.isPresent()) {
-            throw new ResourceNotFoundException("Invalid Token");
+            throw new ResourceNotFoundException(Messages.INVALID_TOKEN);
         }
         UserOtp otp = optionalUserOtp.get();
         if (StaticFieldsAndMethods.isTokenExpired(otp.getTokenCreationDate())) {
-            throw new ResourceNotFoundException("Token Expired");
+            throw new ResourceNotFoundException(Messages.TOKEN_EXPIRED);
         }
 
         Optional<User> optionalUser = Optional.ofNullable(userService.findById(otp.getUserId()));
         if (!optionalUser.isPresent()) {
-            throw new ResourceNotFoundException("User is not found with id " + otp.getUserId());
+            throw new ResourceNotFoundException(Messages.USER_NOT_FOUND + " with id " + otp.getUserId());
         }
 
         User user = optionalUser.get();
@@ -51,6 +52,6 @@ public class LoginServiceImpl implements LoginService {
 
         otpService.deleteUserOtp(otp);
 
-        return "Password changed successfully";
+        return Messages.PASSWORD_CHANGE_SUCCESS;
     }
 }

@@ -1,5 +1,6 @@
 package com.schoolmanagement.schoolmanagement.service;
 
+import com.schoolmanagement.schoolmanagement.constant.Messages;
 import com.schoolmanagement.schoolmanagement.constant.StaticFieldsAndMethods;
 import com.schoolmanagement.schoolmanagement.entity.Erole;
 import com.schoolmanagement.schoolmanagement.entity.Role;
@@ -16,7 +17,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -82,7 +82,7 @@ class OtpServiceImplTest {
         when(otpRepository.findByToken(token)).thenReturn(null);
 
         ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> otpService.validateOtp(token, otp));
-        assertEquals("Invalid Token", exception.getMessage());
+        assertEquals(Messages.INVALID_TOKEN, exception.getMessage());
     }
 
     @Test
@@ -92,7 +92,7 @@ class OtpServiceImplTest {
         when(otpRepository.findByToken(token)).thenReturn(userOtp);
 
         ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> otpService.validateOtp(token, otp));
-        assertEquals("Token Expired", exception.getMessage());
+        assertEquals(Messages.TOKEN_EXPIRED, exception.getMessage());
     }
 
     @Test
@@ -102,7 +102,7 @@ class OtpServiceImplTest {
         String invalidOtp = String.valueOf(Integer.parseInt(otp) + 1);
 
         ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> otpService.validateOtp(token, invalidOtp));
-        assertEquals("Invalid OTP", exception.getMessage());
+        assertEquals(Messages.INVALID_OTP, exception.getMessage());
     }
 
     @Test
@@ -153,6 +153,6 @@ class OtpServiceImplTest {
         when(userService.findByEmail(email)).thenReturn(null);
 
         ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> otpService.sendOtpViaMail(email, "Testing send OTP"));
-        assertEquals("No account found with this email", exception.getMessage());
+        assertTrue(exception.getMessage().contains(Messages.USER_NOT_FOUND));
     }
 }

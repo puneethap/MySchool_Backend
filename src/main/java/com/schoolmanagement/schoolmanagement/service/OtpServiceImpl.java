@@ -1,5 +1,6 @@
 package com.schoolmanagement.schoolmanagement.service;
 
+import com.schoolmanagement.schoolmanagement.constant.Messages;
 import com.schoolmanagement.schoolmanagement.constant.StaticFieldsAndMethods;
 import com.schoolmanagement.schoolmanagement.entity.User;
 import com.schoolmanagement.schoolmanagement.entity.UserOtp;
@@ -32,14 +33,14 @@ public class OtpServiceImpl implements OtpService {
     public String validateOtp(String token, String otp) throws ResourceNotFoundException {
         Optional<UserOtp> optionalUserOtp = Optional.ofNullable(findUserOtpByToken(token));
         if (!optionalUserOtp.isPresent()) {
-            throw new ResourceNotFoundException("Invalid Token");
+            throw new ResourceNotFoundException(Messages.INVALID_TOKEN);
         }
         UserOtp user = optionalUserOtp.get();
         if (StaticFieldsAndMethods.isTokenExpired(user.getTokenCreationDate())) {
-            throw new ResourceNotFoundException("Token Expired");
+            throw new ResourceNotFoundException(Messages.TOKEN_EXPIRED);
         }
         if (!(otp.equals(user.getOtp()))) {
-            throw new ResourceNotFoundException("Invalid OTP");
+            throw new ResourceNotFoundException(Messages.INVALID_OTP);
         }
 
         user.setOtpValidated("Y");
@@ -62,7 +63,7 @@ public class OtpServiceImpl implements OtpService {
     public String sendOtpViaMail(String emailId, String subject) throws Exception {
         Optional<User> optionalUser = Optional.ofNullable(userService.findByEmail(emailId));
         if (!optionalUser.isPresent()) {
-            throw new ResourceNotFoundException("No account found with this email");
+            throw new ResourceNotFoundException(Messages.USER_NOT_FOUND + " with email Id " + emailId);
         }
 
         User user = optionalUser.get();

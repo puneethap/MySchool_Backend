@@ -1,5 +1,6 @@
 package com.schoolmanagement.schoolmanagement.service;
 
+import com.schoolmanagement.schoolmanagement.constant.Messages;
 import com.schoolmanagement.schoolmanagement.constant.StaticFieldsAndMethods;
 import com.schoolmanagement.schoolmanagement.entity.Erole;
 import com.schoolmanagement.schoolmanagement.entity.Role;
@@ -15,11 +16,12 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest
 class LoginServiceImplTest {
@@ -89,7 +91,7 @@ class LoginServiceImplTest {
 
         String successMessage = loginService.resetPassword(token, password);
 
-        assertEquals("Password changed successfully", successMessage);
+        assertEquals(Messages.PASSWORD_CHANGE_SUCCESS, successMessage);
     }
 
     @Test
@@ -97,7 +99,7 @@ class LoginServiceImplTest {
         when(otpService.findUserOtpByToken(token)).thenReturn(null);
 
         ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> loginService.resetPassword(token, password));
-        assertEquals("Invalid Token", exception.getMessage());
+        assertEquals(Messages.INVALID_TOKEN, exception.getMessage());
     }
 
     @Test
@@ -108,7 +110,7 @@ class LoginServiceImplTest {
         when(otpService.findUserOtpByToken(token)).thenReturn(userOtp);
 
         ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> loginService.resetPassword(token, password));
-        assertEquals("Token Expired", exception.getMessage());
+        assertEquals(Messages.TOKEN_EXPIRED, exception.getMessage());
     }
 
     @Test
@@ -119,6 +121,6 @@ class LoginServiceImplTest {
         when(userService.findById(userOtp.getUserId())).thenReturn(null);
 
         ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> loginService.resetPassword(token, password));
-        assertEquals("User is not found with id " + userOtp.getUserId(), exception.getMessage());
+        assertEquals(Messages.USER_NOT_FOUND + " with id " + userOtp.getUserId(), exception.getMessage());
     }
 }

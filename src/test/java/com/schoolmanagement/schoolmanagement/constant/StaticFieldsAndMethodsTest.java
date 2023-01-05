@@ -10,7 +10,6 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 class StaticFieldsAndMethodsTest {
 
-    private static final int EXPIRE_TOKEN_AFTER_MINUTES = 5;
     private static final int OTP_LENGTH = 4;
 
     @Test
@@ -29,7 +28,7 @@ class StaticFieldsAndMethodsTest {
 
     @Test
     void isTokenExpired_when_token_is_expired() {
-        LocalDateTime tokenCreationDateTime = LocalDateTime.now().minusMinutes(EXPIRE_TOKEN_AFTER_MINUTES);
+        LocalDateTime tokenCreationDateTime = LocalDateTime.now().minusMinutes(StaticFieldsAndMethods.EXPIRE_TOKEN_AFTER_MINUTES);
         boolean isTokenExpired = StaticFieldsAndMethods.isTokenExpired(tokenCreationDateTime);
 
         assertTrue(isTokenExpired);
