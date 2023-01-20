@@ -67,7 +67,10 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
 
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<ApiResponse> constraintViolationException(ConstraintViolationException exception) {
-        ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, exception.getMessage());
+        List<String> errors = new ArrayList();
+        exception.getConstraintViolations().forEach(violation -> errors.add(violation.getMessage()));
+
+        ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, "Constraint Violation Exception", errors);
         ApiResponse apiResponse = new ApiResponse<>(apiError);
         return ResponseEntity.status(apiError.getStatus()).body(apiResponse);
     }
