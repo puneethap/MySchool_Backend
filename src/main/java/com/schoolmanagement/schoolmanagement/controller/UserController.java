@@ -1,9 +1,9 @@
 package com.schoolmanagement.schoolmanagement.controller;
 
+import com.schoolmanagement.schoolmanagement.config.securityConfig.services.SecurityService;
 import com.schoolmanagement.schoolmanagement.model.ApiError;
 import com.schoolmanagement.schoolmanagement.model.ApiResponse;
 import com.schoolmanagement.schoolmanagement.model.CurrentUser;
-import com.schoolmanagement.schoolmanagement.securityConfig.services.SecurityService;
 import com.schoolmanagement.schoolmanagement.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

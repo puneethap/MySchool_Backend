@@ -1,4 +1,4 @@
-package com.schoolmanagement.schoolmanagement.securityConfig.services;
+package com.schoolmanagement.schoolmanagement.config.securityConfig.services;
 
 import com.schoolmanagement.schoolmanagement.entity.User;
 import com.schoolmanagement.schoolmanagement.repository.UserRepository;

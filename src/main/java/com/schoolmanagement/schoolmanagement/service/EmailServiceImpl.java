@@ -1,12 +1,13 @@
 package com.schoolmanagement.schoolmanagement.service;
 
+import com.schoolmanagement.schoolmanagement.constant.Messages;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 @Service
-public class EmailServiceImpl implements EmailService{
+public class EmailServiceImpl implements EmailService {
 
     @Autowired
     JavaMailSender mailSender;
@@ -17,11 +18,10 @@ public class EmailServiceImpl implements EmailService{
         message.setTo(toEmail);
         message.setSubject(subject);
         message.setText(body);
-        try{
+        try {
             mailSender.send(message);
-        }
-        catch (Exception e){
-            throw new Exception("Email could not be sent");
+        } catch (Exception e) {
+            throw new Exception(Messages.EMAIL_SEND_ERROR);
         }
     }
 }

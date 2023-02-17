@@ -1,14 +1,13 @@
 package com.schoolmanagement.schoolmanagement.service;
 
+import com.schoolmanagement.schoolmanagement.constant.Messages;
 import com.schoolmanagement.schoolmanagement.constant.StaticFieldsAndMethods;
 import com.schoolmanagement.schoolmanagement.entity.User;
 import com.schoolmanagement.schoolmanagement.entity.UserOtp;
 import com.schoolmanagement.schoolmanagement.exception.ResourceNotFoundException;
-import com.schoolmanagement.schoolmanagement.repository.OtpRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -18,48 +17,41 @@ public class LoginServiceImpl implements LoginService {
     UserService userService;
 
     @Autowired
-    EmailService emailService;
-
-    @Autowired
     OtpService otpService;
 
-    @Autowired
-    OtpRepository otpRepository;
+    @Override
+    public String sendPasswordResetOtp(String email) throws Exception {
+        return otpService.sendOtpViaMail(email, "Password Reset OTP");
+    }
 
     @Override
-    public String sendPasswordResetOtpViaMail(String emailId) throws Exception {
-        Optional<User> optionalUser = Optional.ofNullable(userService.findByEmail(emailId));
-        if (!optionalUser.isPresent()) {
-            throw new ResourceNotFoundException("No account found with this email");
-        }
-
-        User user = optionalUser.get();
-        UserOtp userOtp = new UserOtp(user.getId(), user.getEmail(), StaticFieldsAndMethods.generateToken(), LocalDateTime.now(), StaticFieldsAndMethods.generateOTP(4));
-
-        emailService.sendSimpleMail(userOtp.getEmail(), "OTP for password reset", userOtp.getOtp());
-        userOtp = otpService.saveUserOtp(userOtp);
-        return userOtp.getToken();
+    public String validatePasswordResetOtp(String token, String otp) throws ResourceNotFoundException {
+        return otpService.validateOtp(token, otp);
     }
 
     @Override
     public String resetPassword(String token, String password) throws ResourceNotFoundException {
-        Optional<UserOtp> optionalUserOtp = Optional.ofNullable(otpRepository.findByToken(token));
+        Optional<UserOtp> optionalUserOtp = Optional.ofNullable(otpService.findUserOtpByToken(token));
         if (!optionalUserOtp.isPresent()) {
-            throw new ResourceNotFoundException("Token Not present");
+            throw new ResourceNotFoundException(Messages.INVALID_TOKEN);
         }
         UserOtp otp = optionalUserOtp.get();
         if (StaticFieldsAndMethods.isTokenExpired(otp.getTokenCreationDate())) {
-            throw new ResourceNotFoundException("Token Expired");
+            throw new ResourceNotFoundException(Messages.TOKEN_EXPIRED);
         }
 
-        User user = userService.findById(otp.getUserId());
+        Optional<User> optionalUser = Optional.ofNullable(userService.findById(otp.getUserId()));
+        if (!optionalUser.isPresent()) {
+            throw new ResourceNotFoundException(Messages.USER_NOT_FOUND + " with id " + otp.getUserId());
+        }
+
+        User user = optionalUser.get();
         user.setPassword(password);
 
         userService.save(user);
 
-        otpService.delete(otp);
+        otpService.deleteUserOtp(otp);
 
-        return "Password changed successfully";
+        return Messages.PASSWORD_CHANGE_SUCCESS;
     }
-
 }

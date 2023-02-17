@@ -1,4 +1,4 @@
-package com.schoolmanagement.schoolmanagement.securityConfig.jwt;
+package com.schoolmanagement.schoolmanagement.config.securityConfig.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
