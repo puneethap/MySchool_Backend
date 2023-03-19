@@ -74,4 +74,13 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
         ApiResponse apiResponse = new ApiResponse<>(apiError);
         return ResponseEntity.status(apiError.getStatus()).body(apiResponse);
     }
+
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<ApiResponse> badRequestException(BadRequestException exception, WebRequest webRequest) {
+
+        List<?> errors = exception.getErrors();
+        ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, exception.getMessage(), errors);
+        ApiResponse apiResponse = new ApiResponse<>(apiError);
+        return ResponseEntity.status(apiError.getStatus()).body(apiResponse);
+    }
 }
