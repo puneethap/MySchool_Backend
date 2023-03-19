@@ -64,6 +64,7 @@ class StaticFieldsAndMethodsTest {
                     assertFalse(StaticFieldsAndMethods.isFileTypeValid(key, dummyFile));
                 });
 
+        // test for default case
         assertFalse(StaticFieldsAndMethods.isFileTypeValid("dummy", dummyFile));
     }
 }
