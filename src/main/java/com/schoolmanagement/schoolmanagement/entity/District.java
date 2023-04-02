@@ -1,16 +1,16 @@
 package com.schoolmanagement.schoolmanagement.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIncludeProperties;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "districts", uniqueConstraints = {@UniqueConstraint(columnNames = {"name", "state_id"})})
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 public class District {
 
     @Id
@@ -19,11 +19,12 @@ public class District {
 
     private String name;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
             name = "state_id",
             referencedColumnName = "id"
     )
+    @JsonIncludeProperties("id")
     private State state;
 
     public District(String name, State state) {

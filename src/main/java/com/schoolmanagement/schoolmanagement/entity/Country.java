@@ -1,8 +1,6 @@
 package com.schoolmanagement.schoolmanagement.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -10,7 +8,8 @@ import javax.persistence.*;
 @Table(name = "countries", uniqueConstraints = {@UniqueConstraint(columnNames = "name")})
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
+@Getter
+@Setter
 public class Country {
 
     @Id
