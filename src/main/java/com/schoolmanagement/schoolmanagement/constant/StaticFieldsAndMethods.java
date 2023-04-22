@@ -1,9 +1,14 @@
 package com.schoolmanagement.schoolmanagement.constant;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Random;
 import java.util.UUID;
+
+import static com.schoolmanagement.schoolmanagement.constant.FileMimeTypes.EXCEL_TYPE;
+import static com.schoolmanagement.schoolmanagement.constant.FileTypes.EXCEL;
 
 public class StaticFieldsAndMethods {
     private static final String NUMBER_FOR_OTP = "1234567890";
@@ -31,4 +36,15 @@ public class StaticFieldsAndMethods {
         return difference.toMinutes() >= EXPIRE_TOKEN_AFTER_MINUTES;
     }
 
+    public static boolean isFileTypeValid(String expectedFileType, MultipartFile actualFile) {
+
+        switch (expectedFileType) {
+
+            case EXCEL:
+                return actualFile.getContentType().equals(EXCEL_TYPE);
+
+            default:
+                return false;
+        }
+    }
 }
