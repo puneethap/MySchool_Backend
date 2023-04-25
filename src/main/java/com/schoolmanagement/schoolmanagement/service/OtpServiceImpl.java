@@ -31,11 +31,7 @@ public class OtpServiceImpl implements OtpService {
 
     @Override
     public String validateOtp(String token, String otp) throws ResourceNotFoundException {
-        Optional<UserOtp> optionalUserOtp = Optional.ofNullable(findUserOtpByToken(token));
-        if (!optionalUserOtp.isPresent()) {
-            throw new ResourceNotFoundException(Messages.INVALID_TOKEN);
-        }
-        UserOtp user = optionalUserOtp.get();
+        UserOtp user = findUserOtpByToken(token);
         if (StaticFieldsAndMethods.isTokenExpired(user.getTokenCreationDate())) {
             throw new ResourceNotFoundException(Messages.TOKEN_EXPIRED);
         }
@@ -55,18 +51,18 @@ public class OtpServiceImpl implements OtpService {
     }
 
     @Override
-    public UserOtp findUserOtpByToken(String token) {
-        return otpRepository.findByToken(token);
+    public UserOtp findUserOtpByToken(String token) throws ResourceNotFoundException {
+        Optional<UserOtp> optionalUserOtp = Optional.ofNullable(otpRepository.findByToken(token));
+        if (!optionalUserOtp.isPresent()) {
+            throw new ResourceNotFoundException(Messages.INVALID_TOKEN);
+        }
+        return optionalUserOtp.get();
     }
 
     @Override
     public String sendOtpViaMail(String emailId, String subject) throws Exception {
-        Optional<User> optionalUser = Optional.ofNullable(userService.findByEmail(emailId));
-        if (!optionalUser.isPresent()) {
-            throw new ResourceNotFoundException(Messages.USER_NOT_FOUND + " with email Id " + emailId);
-        }
+        User user = userService.findByEmail(emailId);
 
-        User user = optionalUser.get();
         UserOtp userOtp = new UserOtp(user.getId(), user.getEmail(), StaticFieldsAndMethods.generateToken(), LocalDateTime.now(), StaticFieldsAndMethods.generateOTP(4));
 
         emailService.sendSimpleMail(userOtp.getEmail(), subject, userOtp.getOtp());

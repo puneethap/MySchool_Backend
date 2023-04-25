@@ -21,7 +21,7 @@ public class EmailServiceImpl implements EmailService {
         try {
             mailSender.send(message);
         } catch (Exception e) {
-            throw new Exception(Messages.EMAIL_SEND_ERROR);
+            throw new Exception(Messages.EMAIL_SEND_ERROR + "cause : " + e.getMessage());
         }
     }
 }

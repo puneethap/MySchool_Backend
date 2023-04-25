@@ -10,7 +10,7 @@ public interface OtpService {
 
     public void deleteUserOtp(UserOtp otp);
 
-    public UserOtp findUserOtpByToken(String token);
+    public UserOtp findUserOtpByToken(String token) throws ResourceNotFoundException;
 
     public String sendOtpViaMail(String emailId, String subject) throws Exception;
 }
