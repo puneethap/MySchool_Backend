@@ -21,13 +21,13 @@ public class DistrictController {
 
     @PostMapping("/upload")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ApiResponse> uploadStates(MultipartFile districtsFile) throws Exception {
+    public ResponseEntity<ApiResponse> uploadDistricts(MultipartFile districtsFile) throws Exception {
         return ok(new ApiResponse<>(districtService.uploadDistricts(districtsFile)));
     }
 
     @GetMapping()
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ApiResponse> getStatesByCountryId(@RequestParam("stateId") Long stateId) throws ResourceNotFoundException {
+    public ResponseEntity<ApiResponse> getDistrictsByStateId(@RequestParam("stateId") Long stateId) throws ResourceNotFoundException {
         return ok(new ApiResponse<>(districtService.getDistrictsByStateId(stateId)));
     }
 }

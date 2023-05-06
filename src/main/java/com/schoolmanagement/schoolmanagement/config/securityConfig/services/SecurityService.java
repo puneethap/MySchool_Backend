@@ -2,6 +2,7 @@ package com.schoolmanagement.schoolmanagement.config.securityConfig.services;
 
 import com.schoolmanagement.schoolmanagement.entity.Erole;
 import com.schoolmanagement.schoolmanagement.entity.User;
+import com.schoolmanagement.schoolmanagement.exception.ResourceNotFoundException;
 import com.schoolmanagement.schoolmanagement.model.CurrentUser;
 import com.schoolmanagement.schoolmanagement.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ public class SecurityService {
     @Autowired
     private UserService userService;
 
-    public CurrentUser currentUser() {
+    public CurrentUser currentUser() throws ResourceNotFoundException {
         final String userName = ofNullable(this.userName()).orElse("UNKNOWN");
         User user = this.userService.findByUsername(userName);
         CurrentUser currentUser = new CurrentUser();

@@ -1,7 +1,10 @@
 package com.schoolmanagement.schoolmanagement.entity;
 
 import com.fasterxml.jackson.annotation.JsonIncludeProperties;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 

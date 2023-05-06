@@ -10,9 +10,9 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.transaction.Transactional;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -51,30 +51,30 @@ public class CountryServiceImpl implements CountryService {
 
     @Override
     public Country getCountryByName(String countryName) throws ResourceNotFoundException {
-        Optional<Country> optionalCountry = Optional.ofNullable(countryRepository.findByName(countryName));
-        if (!optionalCountry.isPresent()) {
+        Optional<Country> country = Optional.ofNullable(countryRepository.findByName(countryName));
+        if (!country.isPresent()) {
             throw new ResourceNotFoundException(COUNTRY_IS_NOT_PRESENT + " with name : " + countryName);
         }
-        return optionalCountry.get();
+        return country.get();
     }
 
     @Override
     public List<Country> getCountries() throws ResourceNotFoundException {
-        Optional<List<Country>> optionalCountries = Optional.ofNullable(countryRepository.findAll());
-        if (!optionalCountries.isPresent()) {
+        Optional<List<Country>> countries = Optional.ofNullable(countryRepository.findAll());
+        if (!countries.isPresent()) {
             throw new ResourceNotFoundException(NO_COUNTRIES_FOUND);
         }
 
-        return optionalCountries.get();
+        return countries.get();
     }
 
     @Override
     public Country getCountryById(Long countryId) throws ResourceNotFoundException {
-        Optional<Country> optionalCountry = countryRepository.findById(countryId);
-        if (!optionalCountry.isPresent()) {
+        Optional<Country> country = countryRepository.findById(countryId);
+        if (!country.isPresent()) {
             throw new ResourceNotFoundException(COUNTRY_IS_NOT_PRESENT + " with Id : " + countryId);
         }
-        return optionalCountry.get();
+        return country.get();
     }
 
     private List<Country> dataToCountryEntityMapper(MultipartFile countriesFile) throws Exception {

@@ -8,10 +8,12 @@ import com.schoolmanagement.schoolmanagement.exception.ResourceNotFoundException
 import com.schoolmanagement.schoolmanagement.repository.OtpRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+@Transactional
 @Service
 public class OtpServiceImpl implements OtpService {
 
@@ -52,11 +54,11 @@ public class OtpServiceImpl implements OtpService {
 
     @Override
     public UserOtp findUserOtpByToken(String token) throws ResourceNotFoundException {
-        Optional<UserOtp> optionalUserOtp = Optional.ofNullable(otpRepository.findByToken(token));
-        if (!optionalUserOtp.isPresent()) {
+        Optional<UserOtp> userOtp = Optional.ofNullable(otpRepository.findByToken(token));
+        if (!userOtp.isPresent()) {
             throw new ResourceNotFoundException(Messages.INVALID_TOKEN);
         }
-        return optionalUserOtp.get();
+        return userOtp.get();
     }
 
     @Override

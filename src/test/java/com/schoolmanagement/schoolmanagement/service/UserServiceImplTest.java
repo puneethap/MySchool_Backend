@@ -1,8 +1,10 @@
 package com.schoolmanagement.schoolmanagement.service;
 
+import com.schoolmanagement.schoolmanagement.constant.Messages;
 import com.schoolmanagement.schoolmanagement.entity.Erole;
 import com.schoolmanagement.schoolmanagement.entity.Role;
 import com.schoolmanagement.schoolmanagement.entity.User;
+import com.schoolmanagement.schoolmanagement.exception.ResourceNotFoundException;
 import com.schoolmanagement.schoolmanagement.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,7 +16,8 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static java.util.Optional.empty;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -50,7 +53,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void findByUsername() {
+    void findByUsername_success() throws ResourceNotFoundException {
         when(userRepository.findByUsername(username)).thenReturn(user);
 
         User fetchedUser = userService.findByUsername(username);
@@ -59,7 +62,16 @@ class UserServiceImplTest {
     }
 
     @Test
-    void findByEmail() {
+    void findByUsername_failure() throws ResourceNotFoundException {
+        when(userRepository.findByUsername(username)).thenReturn(null);
+
+        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> userService.findByUsername(username));
+
+        assertTrue(exception.getMessage().contains(Messages.USER_NOT_FOUND));
+    }
+
+    @Test
+    void findByEmail_success() throws ResourceNotFoundException {
         when(userRepository.findByEmail(email)).thenReturn(user);
 
         User fetchedUser = userService.findByEmail(email);
@@ -68,12 +80,30 @@ class UserServiceImplTest {
     }
 
     @Test
-    void findById() {
+    void findByEmail_failure() {
+        when(userRepository.findByEmail(email)).thenReturn(null);
+
+        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> userService.findByEmail(email));
+
+        assertTrue(exception.getMessage().contains(Messages.USER_NOT_FOUND));
+    }
+
+    @Test
+    void findById_success() throws ResourceNotFoundException {
         when(userRepository.findById(id)).thenReturn(Optional.ofNullable(user));
 
         User fetchedUser = userService.findById(id);
 
         assertEquals(user, fetchedUser);
+    }
+
+    @Test
+    void findById_falure() {
+        when(userRepository.findById(id)).thenReturn(empty());
+
+        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> userService.findById(id));
+
+        assertTrue(exception.getMessage().contains(Messages.USER_NOT_FOUND));
     }
 
     @Test
