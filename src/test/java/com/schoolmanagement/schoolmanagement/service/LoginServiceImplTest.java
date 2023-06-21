@@ -17,8 +17,9 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static com.schoolmanagement.schoolmanagement.constant.Messages.INVALID_TOKEN;
+import static com.schoolmanagement.schoolmanagement.constant.Messages.USER_NOT_FOUND;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
@@ -95,15 +96,15 @@ class LoginServiceImplTest {
     }
 
     @Test
-    void resetPassword_when_token_is_invalid() {
-        when(otpService.findUserOtpByToken(token)).thenReturn(null);
+    void resetPassword_when_token_is_invalid() throws ResourceNotFoundException {
+        when(otpService.findUserOtpByToken(token)).thenThrow(new ResourceNotFoundException(INVALID_TOKEN));
 
         ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> loginService.resetPassword(token, password));
-        assertEquals(Messages.INVALID_TOKEN, exception.getMessage());
+        assertEquals(INVALID_TOKEN, exception.getMessage());
     }
 
     @Test
-    void resetPassword_when_token_is_expired() {
+    void resetPassword_when_token_is_expired() throws ResourceNotFoundException {
         LocalDateTime expiredTokenCreationDate = tokenCreationDate.minusMinutes(StaticFieldsAndMethods.EXPIRE_TOKEN_AFTER_MINUTES);
         UserOtp userOtp = new UserOtp(userId, email, token, expiredTokenCreationDate, otp);
 
@@ -114,13 +115,13 @@ class LoginServiceImplTest {
     }
 
     @Test
-    void resetPassword_when_user_is_not_present_in_user_table() {
+    void resetPassword_when_user_is_not_present_in_user_table() throws ResourceNotFoundException {
         UserOtp userOtp = new UserOtp(userId, email, token, tokenCreationDate, otp);
 
         when(otpService.findUserOtpByToken(token)).thenReturn(userOtp);
-        when(userService.findById(userOtp.getUserId())).thenReturn(null);
+        when(userService.findById(userOtp.getUserId())).thenThrow(new ResourceNotFoundException(USER_NOT_FOUND));
 
         ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> loginService.resetPassword(token, password));
-        assertEquals(Messages.USER_NOT_FOUND + " with id " + userOtp.getUserId(), exception.getMessage());
+        assertTrue(exception.getMessage().contains(USER_NOT_FOUND));
     }
 }

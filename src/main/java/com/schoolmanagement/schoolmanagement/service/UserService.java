@@ -1,13 +1,14 @@
 package com.schoolmanagement.schoolmanagement.service;
 
 import com.schoolmanagement.schoolmanagement.entity.User;
+import com.schoolmanagement.schoolmanagement.exception.ResourceNotFoundException;
 
 public interface UserService {
-    public User findByUsername(String userName);
+    User findByUsername(String userName) throws ResourceNotFoundException;
 
-    public User findByEmail(String emailId);
+    User findByEmail(String emailId) throws ResourceNotFoundException;
 
-    public User findById(Long id);
+    User findById(Long id) throws ResourceNotFoundException;
 
-    public User save(User user);
+    User save(User user);
 }

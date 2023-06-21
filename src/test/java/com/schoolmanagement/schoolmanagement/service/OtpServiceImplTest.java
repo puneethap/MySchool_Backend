@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
+import static com.schoolmanagement.schoolmanagement.constant.Messages.USER_NOT_FOUND;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -115,7 +116,7 @@ class OtpServiceImplTest {
     }
 
     @Test
-    void findUserOtpByToken_when_record_found() {
+    void findUserOtpByToken_when_record_found() throws ResourceNotFoundException {
         when(otpRepository.findByToken(token)).thenReturn(userOtp);
 
         UserOtp fetchedUserOtp = otpService.findUserOtpByToken(token);
@@ -124,12 +125,11 @@ class OtpServiceImplTest {
     }
 
     @Test
-    void findUserOtpByToken_when_record_not_found() {
+    void findUserOtpByToken_when_record_not_found() throws ResourceNotFoundException {
         when(otpRepository.findByToken(token)).thenReturn(null);
 
-        UserOtp fetchedUserOtp = otpService.findUserOtpByToken(token);
-
-        assertEquals(null, fetchedUserOtp);
+        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> otpService.findUserOtpByToken(token));
+        assertEquals(Messages.INVALID_TOKEN, exception.getMessage());
     }
 
     @Test
@@ -149,10 +149,10 @@ class OtpServiceImplTest {
     }
 
     @Test
-    void sendOtpViaMail_when_no_account_found_with_given_email() {
-        when(userService.findByEmail(email)).thenReturn(null);
+    void sendOtpViaMail_when_no_account_found_with_given_email() throws ResourceNotFoundException {
+        when(userService.findByEmail(email)).thenThrow(new ResourceNotFoundException(USER_NOT_FOUND));
 
         ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> otpService.sendOtpViaMail(email, "Testing send OTP"));
-        assertTrue(exception.getMessage().contains(Messages.USER_NOT_FOUND));
+        assertTrue(exception.getMessage().contains(USER_NOT_FOUND));
     }
 }

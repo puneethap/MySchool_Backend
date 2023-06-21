@@ -5,7 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+@Transactional
 @Service
 public class EmailServiceImpl implements EmailService {
 
@@ -21,7 +23,7 @@ public class EmailServiceImpl implements EmailService {
         try {
             mailSender.send(message);
         } catch (Exception e) {
-            throw new Exception(Messages.EMAIL_SEND_ERROR);
+            throw new Exception(Messages.EMAIL_SEND_ERROR + " cause : " + e.getMessage());
         }
     }
 }

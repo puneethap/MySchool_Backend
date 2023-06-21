@@ -4,13 +4,13 @@ import com.schoolmanagement.schoolmanagement.entity.UserOtp;
 import com.schoolmanagement.schoolmanagement.exception.ResourceNotFoundException;
 
 public interface OtpService {
-    public UserOtp saveUserOtp(UserOtp userOtp);
+    UserOtp saveUserOtp(UserOtp userOtp);
 
-    public String validateOtp(String token, String otp) throws ResourceNotFoundException;
+    String validateOtp(String token, String otp) throws ResourceNotFoundException;
 
-    public void deleteUserOtp(UserOtp otp);
+    void deleteUserOtp(UserOtp otp);
 
-    public UserOtp findUserOtpByToken(String token);
+    UserOtp findUserOtpByToken(String token) throws ResourceNotFoundException;
 
-    public String sendOtpViaMail(String emailId, String subject) throws Exception;
+    String sendOtpViaMail(String emailId, String subject) throws Exception;
 }

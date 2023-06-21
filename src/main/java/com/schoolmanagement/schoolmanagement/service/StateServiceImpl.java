@@ -11,9 +11,9 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.transaction.Transactional;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -55,11 +55,11 @@ public class StateServiceImpl implements StateService {
 
     @Override
     public State getStateByName(String stateName) throws ResourceNotFoundException {
-        Optional<State> optionalState = Optional.ofNullable(stateRepository.findByName(stateName));
-        if (!optionalState.isPresent()) {
+        Optional<State> state = Optional.ofNullable(stateRepository.findByName(stateName));
+        if (!state.isPresent()) {
             throw new ResourceNotFoundException(STATE_IS_NOT_PRESENT + " with name : " + stateName);
         }
-        return optionalState.get();
+        return state.get();
     }
 
     @Override

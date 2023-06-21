@@ -4,9 +4,9 @@ import com.schoolmanagement.schoolmanagement.exception.ResourceNotFoundException
 
 public interface LoginService {
 
-    public String resetPassword(String token, String password) throws ResourceNotFoundException;
+    String resetPassword(String token, String password) throws ResourceNotFoundException;
 
-    public String sendPasswordResetOtp(String email) throws Exception;
+    String sendPasswordResetOtp(String email) throws Exception;
 
-    public String validatePasswordResetOtp(String token, String otp) throws ResourceNotFoundException;
+    String validatePasswordResetOtp(String token, String otp) throws ResourceNotFoundException;
 }
