@@ -69,6 +69,7 @@ public class AdmissionEnquiryRequestBody {
                 .parentName(this.parentName)
                 .phoneNumber(Long.parseLong(this.phoneNumber))
                 .emailId(this.emailId)
+                .enquiredDate(LocalDate.now())
                 .address(Address
                         .builder()
                         .addressText(this.addressText)
@@ -79,7 +80,6 @@ public class AdmissionEnquiryRequestBody {
                         .country(Country.builder().id(this.countryId).build())
                         .build()
                 )
-                .enquiredDate(LocalDate.now())
                 .build();
 
         return admissionEnquiry;
