@@ -1,9 +1,6 @@
 package com.schoolmanagement.schoolmanagement.model;
 
-import com.schoolmanagement.schoolmanagement.entity.Address;
-import com.schoolmanagement.schoolmanagement.entity.Country;
-import com.schoolmanagement.schoolmanagement.entity.District;
-import com.schoolmanagement.schoolmanagement.entity.State;
+import com.schoolmanagement.schoolmanagement.entity.*;
 import lombok.Builder;
 import lombok.Data;
 
@@ -64,27 +61,26 @@ public class AdmissionEnquiryRequestBody {
     @NotNull(message = "Country Id " + IS_NULL)
     private Long countryId;
 
-    public com.schoolmanagement.schoolmanagement.entity.AdmissionEnquiry toAdmissionEnquiryEntity() {
-        com.schoolmanagement.schoolmanagement.entity.AdmissionEnquiry admissionEnquiry =
-                com.schoolmanagement.schoolmanagement.entity.AdmissionEnquiry
+    public AdmissionEnquiry toAdmissionEnquiryEntity() {
+        AdmissionEnquiry admissionEnquiry = AdmissionEnquiry
+                .builder()
+                .studentName(this.studentName)
+                .admissionSeekingStandard(this.admissionSeekingStandard)
+                .parentName(this.parentName)
+                .phoneNumber(Long.parseLong(this.phoneNumber))
+                .emailId(this.emailId)
+                .address(Address
                         .builder()
-                        .studentName(this.studentName)
-                        .admissionSeekingStandard(this.admissionSeekingStandard)
-                        .parentName(this.parentName)
-                        .phoneNumber(Long.parseLong(this.phoneNumber))
-                        .emailId(this.emailId)
-                        .address(Address
-                                .builder()
-                                .addressText(this.addressText)
-                                .city(this.city)
-                                .pinCode(Long.parseLong(this.pinCode))
-                                .district(District.builder().id(this.districtId).build())
-                                .state(State.builder().id(this.stateId).build())
-                                .country(Country.builder().id(this.countryId).build())
-                                .build()
-                        )
-                        .enquiredDate(LocalDate.now())
-                        .build();
+                        .addressText(this.addressText)
+                        .city(this.city)
+                        .pinCode(Long.parseLong(this.pinCode))
+                        .district(District.builder().id(this.districtId).build())
+                        .state(State.builder().id(this.stateId).build())
+                        .country(Country.builder().id(this.countryId).build())
+                        .build()
+                )
+                .enquiredDate(LocalDate.now())
+                .build();
 
         return admissionEnquiry;
     }
