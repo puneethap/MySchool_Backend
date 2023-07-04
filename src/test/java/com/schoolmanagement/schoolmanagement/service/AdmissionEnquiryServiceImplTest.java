@@ -105,12 +105,21 @@ class AdmissionEnquiryServiceImplTest {
         assertEquals(response.getParentName(), admissionEnquiryEntity.getParentName());
         assertEquals(response.getPhoneNumber(), admissionEnquiryEntity.getPhoneNumber().toString());
         assertEquals(response.getEmailId(), admissionEnquiryEntity.getEmailId());
+
         assertEquals(response.getAddressText(), admissionEnquiryEntity.getAddress().getAddressText());
         assertEquals(response.getCity(), admissionEnquiryEntity.getAddress().getCity());
         assertEquals(response.getPinCode(), admissionEnquiryEntity.getAddress().getPinCode().toString());
+
         assertEquals(response.getDistrict().getId(), admissionEnquiryEntity.getAddress().getDistrict().getId());
+        assertEquals(response.getDistrict().getName(), district.getName());
+        assertEquals(response.getDistrict().getState().getId(), state.getId());
+
         assertEquals(response.getState().getId(), admissionEnquiryEntity.getAddress().getState().getId());
+        assertEquals(response.getState().getName(), state.getName());
+        assertEquals(response.getState().getCountry().getId(), country.getId());
+
         assertEquals(response.getCountry().getId(), admissionEnquiryEntity.getAddress().getCountry().getId());
+        assertEquals(response.getCountry().getName(), country.getName());
     }
 
     @Test
