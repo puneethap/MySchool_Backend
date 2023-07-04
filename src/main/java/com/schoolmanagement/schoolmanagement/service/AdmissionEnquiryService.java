@@ -1,0 +1,10 @@
+package com.schoolmanagement.schoolmanagement.service;
+
+import com.schoolmanagement.schoolmanagement.exception.BadRequestException;
+import com.schoolmanagement.schoolmanagement.exception.ResourceNotFoundException;
+import com.schoolmanagement.schoolmanagement.model.AdmissionEnquiryRequestBody;
+import com.schoolmanagement.schoolmanagement.model.AdmissionEnquiryResponseBody;
+
+public interface AdmissionEnquiryService {
+    AdmissionEnquiryResponseBody createAdmissionEnquiry(AdmissionEnquiryRequestBody admissionEnquiry) throws BadRequestException, ResourceNotFoundException;
+}

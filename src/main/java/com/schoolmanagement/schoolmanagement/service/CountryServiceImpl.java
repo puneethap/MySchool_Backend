@@ -53,7 +53,7 @@ public class CountryServiceImpl implements CountryService {
     public Country getCountryByName(String countryName) throws ResourceNotFoundException {
         Optional<Country> country = Optional.ofNullable(countryRepository.findByName(countryName));
         if (!country.isPresent()) {
-            throw new ResourceNotFoundException(COUNTRY_IS_NOT_PRESENT + " with name : " + countryName);
+            throw new ResourceNotFoundException(COUNTRY_NOT_FOUND + " : " + countryName);
         }
         return country.get();
     }
@@ -72,7 +72,7 @@ public class CountryServiceImpl implements CountryService {
     public Country getCountryById(Long countryId) throws ResourceNotFoundException {
         Optional<Country> country = countryRepository.findById(countryId);
         if (!country.isPresent()) {
-            throw new ResourceNotFoundException(COUNTRY_IS_NOT_PRESENT + " with Id : " + countryId);
+            throw new ResourceNotFoundException(COUNTRY_NOT_FOUND + " with id : " + countryId);
         }
         return country.get();
     }

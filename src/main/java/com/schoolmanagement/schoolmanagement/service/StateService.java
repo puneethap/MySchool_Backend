@@ -13,4 +13,8 @@ public interface StateService {
     State getStateByName(String stringCellValue) throws ResourceNotFoundException;
 
     List<State> getStatesByCountryId(Long countryId) throws ResourceNotFoundException;
+
+    Long getCountryIdByStateId(Long stateId) throws ResourceNotFoundException;
+
+    State getStateById(Long id) throws ResourceNotFoundException;
 }
