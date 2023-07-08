@@ -12,6 +12,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Builder
+//@JsonIgnoreProperties(value = {"country"})
 public class State {
 
     @Id
@@ -24,7 +25,6 @@ public class State {
     @JoinColumn(
             name = "country_id",
             referencedColumnName = "id"
-
     )
     @JsonIncludeProperties("id")
     private Country country;

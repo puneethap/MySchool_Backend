@@ -12,6 +12,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Builder
+//@JsonIgnoreProperties(value = {"state"})
 public class District {
 
     @Id
