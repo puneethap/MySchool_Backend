@@ -1,14 +1,14 @@
 package com.schoolmanagement.schoolmanagement.service;
 
-import com.schoolmanagement.schoolmanagement.constant.enums.AdmissionEnquiryFilterCriteria;
-import com.schoolmanagement.schoolmanagement.constant.enums.SortOrder;
 import com.schoolmanagement.schoolmanagement.entity.AdmissionEnquiry;
 import com.schoolmanagement.schoolmanagement.entity.Country;
 import com.schoolmanagement.schoolmanagement.entity.District;
 import com.schoolmanagement.schoolmanagement.entity.State;
+import com.schoolmanagement.schoolmanagement.enums.SortOrder;
 import com.schoolmanagement.schoolmanagement.exception.BadRequestException;
 import com.schoolmanagement.schoolmanagement.exception.ResourceNotFoundException;
-import com.schoolmanagement.schoolmanagement.model.AdmissionEnquiryFilterCriteriaInput;
+import com.schoolmanagement.schoolmanagement.filter.AdmissionEnquiryFilterCriteria;
+import com.schoolmanagement.schoolmanagement.filter.AdmissionEnquiryFilterSpecification;
 import com.schoolmanagement.schoolmanagement.model.AdmissionEnquiryRequestBody;
 import com.schoolmanagement.schoolmanagement.model.AdmissionEnquiryResponseBody;
 import com.schoolmanagement.schoolmanagement.repository.AdmissionEnquiryRepository;
@@ -18,6 +18,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -64,11 +65,9 @@ public class AdmissionEnquiryServiceImpl implements AdmissionEnquiryService {
     }
 
     @Override
-    public Page<AdmissionEnquiryResponseBody> getAdmissionEnquiries(Integer pageNumber, Integer pageSize, String sortBy, SortOrder sortOrder, AdmissionEnquiryFilterCriteria filterBy, AdmissionEnquiryFilterCriteriaInput filterCriteria) throws BadRequestException {
+    public Page<AdmissionEnquiryResponseBody> getAdmissionEnquiries(Integer pageNumber, Integer pageSize, String sortBy, SortOrder sortOrder, AdmissionEnquiryFilterCriteria filterCriteria) {
 
-        Boolean filterRequired = filterBy != null ? true : false;
-
-        Page<AdmissionEnquiry> entityResponse = null;
+        Boolean filterApplied = filterCriteria != null ? true : false;
         Pageable pageableRequest = null;
 
         switch (sortOrder) {
@@ -81,26 +80,14 @@ public class AdmissionEnquiryServiceImpl implements AdmissionEnquiryService {
                 break;
         }
 
+        Page<AdmissionEnquiry> entityResponse;
 
-        if (filterRequired) {
-            validateFilterCriteria(filterBy, filterCriteria);
-
-            switch (filterBy) {
-                case ADMISSION_SEEKING_STANDARD:
-                    entityResponse = admissionEnquiryRepository.findByAdmissionSeekingStandard(filterCriteria.getAdmissionSeekingStandard(), pageableRequest);
-                    break;
-
-                case ENQUIRED_DATE:
-                    entityResponse = admissionEnquiryRepository.findByEnquiredDateBetween(filterCriteria.getStartDate(), filterCriteria.getEndDate(), pageableRequest);
-                    break;
-
-                case SEARCH_TEXT:
-                    entityResponse = admissionEnquiryRepository.findByStudentNameContaining(filterCriteria.getSearchText(), pageableRequest);
-            }
+        if (filterApplied) {
+            Specification<AdmissionEnquiry> specifications = AdmissionEnquiryFilterSpecification.filterBy(filterCriteria);
+            entityResponse = admissionEnquiryRepository.findAll(specifications, pageableRequest);
         } else {
             entityResponse = admissionEnquiryRepository.findAll(pageableRequest);
         }
-
 
         return entityResponse.map(entity -> {
             try {
@@ -175,31 +162,5 @@ public class AdmissionEnquiryServiceImpl implements AdmissionEnquiryService {
 
     private District getDistrictById(Long id) throws ResourceNotFoundException {
         return districtService.getDistrictById(id);
-    }
-
-    private void validateFilterCriteria(AdmissionEnquiryFilterCriteria filterBy, AdmissionEnquiryFilterCriteriaInput filterCriteria) throws BadRequestException {
-        switch (filterBy) {
-            case ADMISSION_SEEKING_STANDARD: {
-                if (filterCriteria.getAdmissionSeekingStandard() == null)
-                    throw new BadRequestException("Admission Seeking Standard is missing from request body");
-                break;
-            }
-
-            case ENQUIRED_DATE: {
-                if (filterCriteria.getStartDate() == null)
-                    throw new BadRequestException("Start date is missing in the request body");
-
-                if (filterCriteria.getEndDate() == null)
-                    throw new BadRequestException("End date is missing in the request body");
-
-                break;
-            }
-
-            case SEARCH_TEXT: {
-                if (filterCriteria.getSearchText() == null)
-                    throw new BadRequestException("Search Text is missing in request body");
-                break;
-            }
-        }
     }
 }

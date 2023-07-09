@@ -1,10 +1,8 @@
 package com.schoolmanagement.schoolmanagement.controller;
 
-import com.schoolmanagement.schoolmanagement.constant.enums.AdmissionEnquiryFilterCriteria;
-import com.schoolmanagement.schoolmanagement.constant.enums.SortOrder;
-import com.schoolmanagement.schoolmanagement.exception.BadRequestException;
+import com.schoolmanagement.schoolmanagement.enums.SortOrder;
 import com.schoolmanagement.schoolmanagement.exception.ResourceNotFoundException;
-import com.schoolmanagement.schoolmanagement.model.AdmissionEnquiryFilterCriteriaInput;
+import com.schoolmanagement.schoolmanagement.filter.AdmissionEnquiryFilterCriteria;
 import com.schoolmanagement.schoolmanagement.model.AdmissionEnquiryRequestBody;
 import com.schoolmanagement.schoolmanagement.model.ApiResponse;
 import com.schoolmanagement.schoolmanagement.service.AdmissionEnquiryService;
@@ -36,19 +34,17 @@ public class AdmissionEnquiryController {
 
     @PostMapping()
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ApiResponse> getAdmissionEnquiries(@RequestParam
+    public ResponseEntity<ApiResponse> getAdmissionEnquiries(@RequestParam(defaultValue = "0")
                                                              Integer pageNumber,
-                                                             @RequestParam
+                                                             @RequestParam(defaultValue = "10")
                                                              Integer pageSize,
                                                              @RequestParam(defaultValue = "enquiredDate")
                                                              String sortBy,
                                                              @RequestParam(defaultValue = "DESC")
                                                              SortOrder sortOrder,
-                                                             @RequestParam(required = false)
-                                                             AdmissionEnquiryFilterCriteria filterBy,
                                                              @RequestBody(required = false)
-                                                             AdmissionEnquiryFilterCriteriaInput filterCriteria) throws BadRequestException {
-        return ok(new ApiResponse<>(admissionEnquiryService.getAdmissionEnquiries(pageNumber, pageSize, sortBy, sortOrder, filterBy, filterCriteria)));
+                                                             AdmissionEnquiryFilterCriteria filterCriteria) {
+        return ok(new ApiResponse<>(admissionEnquiryService.getAdmissionEnquiries(pageNumber, pageSize, sortBy, sortOrder, filterCriteria)));
     }
 
     @GetMapping("/{id}")
