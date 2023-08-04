@@ -67,7 +67,7 @@ public class DistrictServiceImpl implements DistrictService {
     public Long getStateIdByDistrictId(Long districtId) throws ResourceNotFoundException {
         Optional<District> district = districtRepository.findById(districtId);
         if (!district.isPresent())
-            throw new ResourceNotFoundException(DISTRICT_NOT_FOUND + " with id : " + districtId);
+            throw new ResourceNotFoundException(DISTRICT_NOT_FOUND + " : " + districtId);
 
         return district.get().getState().getId();
     }
@@ -76,8 +76,9 @@ public class DistrictServiceImpl implements DistrictService {
     public District getDistrictById(Long id) throws ResourceNotFoundException {
         Optional<District> district = districtRepository.findById(id);
         if (!district.isPresent()) {
-            throw new ResourceNotFoundException(DISTRICT_NOT_FOUND + " with id : " + id);
+            throw new ResourceNotFoundException(DISTRICT_NOT_FOUND + " : " + id);
         }
+
         return district.get();
     }
 

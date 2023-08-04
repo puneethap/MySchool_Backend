@@ -27,5 +27,4 @@ public class AdmissionEnquiry {
 
     @Embedded
     private Address address;
-
 }

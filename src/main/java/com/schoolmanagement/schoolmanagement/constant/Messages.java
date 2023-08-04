@@ -37,4 +37,6 @@ public class Messages {
     public static final String INVALID_PIN_CODE = "PIN code should contain 6 positive digits";
     public static final String WRONG_DISTRICT_STATE_COMBINATION = "Wrong combination of district and state";
     public static final String WRONG_STATE_COUNTRY_COMBINATION = "Wrong combination of state and country";
+    public static final String RECORD_NOT_FOUND = "Record is not found";
+
 }

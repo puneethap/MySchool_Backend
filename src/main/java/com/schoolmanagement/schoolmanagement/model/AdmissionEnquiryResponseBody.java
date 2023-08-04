@@ -4,6 +4,7 @@ import com.schoolmanagement.schoolmanagement.entity.AdmissionEnquiry;
 import com.schoolmanagement.schoolmanagement.entity.Country;
 import com.schoolmanagement.schoolmanagement.entity.District;
 import com.schoolmanagement.schoolmanagement.entity.State;
+import com.schoolmanagement.schoolmanagement.exception.ResourceNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -28,7 +29,7 @@ public class AdmissionEnquiryResponseBody {
     private State state;
     private Country country;
 
-    public AdmissionEnquiryResponseBody entityToAdmissionEnquiryResponse(AdmissionEnquiry admissionEnquiryEntity) {
+    public AdmissionEnquiryResponseBody entityToAdmissionEnquiryResponse(AdmissionEnquiry admissionEnquiryEntity) throws ResourceNotFoundException {
         this.id = admissionEnquiryEntity.getId();
         this.studentName = admissionEnquiryEntity.getStudentName();
         this.admissionSeekingStandard = admissionEnquiryEntity.getAdmissionSeekingStandard();
@@ -44,6 +45,5 @@ public class AdmissionEnquiryResponseBody {
         this.country = admissionEnquiryEntity.getAddress().getCountry();
 
         return this;
-
     }
 }

@@ -69,11 +69,12 @@ public class CountryServiceImpl implements CountryService {
     }
 
     @Override
-    public Country getCountryById(Long countryId) throws ResourceNotFoundException {
-        Optional<Country> country = countryRepository.findById(countryId);
+    public Country getCountryById(Long id) throws ResourceNotFoundException {
+        Optional<Country> country = countryRepository.findById(id);
         if (!country.isPresent()) {
-            throw new ResourceNotFoundException(COUNTRY_NOT_FOUND + " with id : " + countryId);
+            throw new ResourceNotFoundException(COUNTRY_NOT_FOUND + " : " + id);
         }
+
         return country.get();
     }
 

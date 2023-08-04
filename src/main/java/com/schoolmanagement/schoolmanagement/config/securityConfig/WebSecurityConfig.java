@@ -51,8 +51,10 @@ public class WebSecurityConfig {
                 .authorizeRequests()
                 .antMatchers("/api/test/**").permitAll()
                 .antMatchers("/user/**").permitAll()
+                .antMatchers("/h2-console/**").permitAll()
                 .anyRequest().authenticated();
 
+        http.headers().frameOptions().disable();
         http.authenticationProvider(authenticationProvider());
 
         http.addFilterBefore(this.jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
