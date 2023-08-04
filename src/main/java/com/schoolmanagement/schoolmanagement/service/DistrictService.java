@@ -11,4 +11,8 @@ public interface DistrictService {
     String uploadDistricts(MultipartFile countriesFile) throws Exception;
 
     List<District> getDistrictsByStateId(Long stateId) throws ResourceNotFoundException;
+
+    Long getStateIdByDistrictId(Long districtId) throws ResourceNotFoundException;
+
+    District getDistrictById(Long id) throws ResourceNotFoundException;
 }

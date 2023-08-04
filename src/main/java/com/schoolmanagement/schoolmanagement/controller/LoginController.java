@@ -31,7 +31,6 @@ import static org.springframework.http.ResponseEntity.ok;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/mySchool")
 @Validated
 public class LoginController {
 

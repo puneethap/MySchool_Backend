@@ -57,7 +57,7 @@ public class StateServiceImpl implements StateService {
     public State getStateByName(String stateName) throws ResourceNotFoundException {
         Optional<State> state = Optional.ofNullable(stateRepository.findByName(stateName));
         if (!state.isPresent()) {
-            throw new ResourceNotFoundException(STATE_IS_NOT_PRESENT + " with name : " + stateName);
+            throw new ResourceNotFoundException(STATE_NOT_FOUND + " : " + stateName);
         }
         return state.get();
     }
@@ -70,6 +70,24 @@ public class StateServiceImpl implements StateService {
         }
 
         return states;
+    }
+
+    @Override
+    public Long getCountryIdByStateId(Long stateId) throws ResourceNotFoundException {
+        Optional<State> state = stateRepository.findById(stateId);
+        if (!state.isPresent())
+            throw new ResourceNotFoundException(STATE_NOT_FOUND + " with id : " + stateId);
+
+        return state.get().getCountry().getId();
+    }
+
+    @Override
+    public State getStateById(Long id) throws ResourceNotFoundException {
+        Optional<State> state = stateRepository.findById(id);
+        if (!state.isPresent())
+            throw new ResourceNotFoundException(STATE_NOT_FOUND + " with id : " + id);
+
+        return state.get();
     }
 
     private List<String> errorsInFile(MultipartFile statesFile) {
@@ -152,7 +170,7 @@ public class StateServiceImpl implements StateService {
                 try {
                     country = countryService.getCountryByName(countryCell.getStringCellValue());
                 } catch (ResourceNotFoundException exception) {
-                    errors.add("Row " + (row.getRowNum() + 1) + " : " + INVALID_COUNTRY);
+                    errors.add("Row " + (row.getRowNum() + 1) + " : " + COUNTRY_NOT_FOUND);
                     continue;
                 }
 

@@ -19,6 +19,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 import static com.schoolmanagement.schoolmanagement.constant.FileTypes.EXCEL;
 import static com.schoolmanagement.schoolmanagement.constant.Messages.*;
@@ -60,6 +61,24 @@ public class DistrictServiceImpl implements DistrictService {
         }
 
         return districts;
+    }
+
+    @Override
+    public Long getStateIdByDistrictId(Long districtId) throws ResourceNotFoundException {
+        Optional<District> district = districtRepository.findById(districtId);
+        if (!district.isPresent())
+            throw new ResourceNotFoundException(DISTRICT_NOT_FOUND + " with id : " + districtId);
+
+        return district.get().getState().getId();
+    }
+
+    @Override
+    public District getDistrictById(Long id) throws ResourceNotFoundException {
+        Optional<District> district = districtRepository.findById(id);
+        if (!district.isPresent()) {
+            throw new ResourceNotFoundException(DISTRICT_NOT_FOUND + " with id : " + id);
+        }
+        return district.get();
     }
 
     private List<String> errorsInFile(MultipartFile districtsFile) {
@@ -143,7 +162,7 @@ public class DistrictServiceImpl implements DistrictService {
                 try {
                     state = stateService.getStateByName(stateCell.getStringCellValue());
                 } catch (ResourceNotFoundException exception) {
-                    errors.add("Row " + (row.getRowNum() + 1) + " : " + INVALID_STATE);
+                    errors.add("Row " + (row.getRowNum() + 1) + " : " + STATE_NOT_FOUND);
                     continue;
                 }
 
